@@ -1,8 +1,9 @@
 {
-  "name": "react-typescript-tailwind-project",
+  "name": "ping-me-messenger-ui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": "Mithun Mohandas",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -10,8 +11,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.6.7",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",
@@ -25,7 +28,7 @@
     "eslint-plugin-react-refresh": "^0.4.4",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
-    "typescript": "^5.2.2",
+    "typescript": "5.2.2",
     "vite": "^5.0.0"
   }
 }

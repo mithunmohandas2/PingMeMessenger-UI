@@ -1,13 +1,14 @@
+import { Route, Routes } from "react-router-dom"
+import HomePage from "./Pages/HomePage"
+import ChatPage from "./Pages/ChatPage"
 function App() {
 
   return (
     <>
-      <h1>Sample Project</h1>
-      <p> Created by <a href="https://mithunmohandas2.github.io/Mithun-Mohandas/"> Mithun Mohandas </a> </p>
-
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/chats" element={<ChatPage />} />
+      </Routes>
     </>
   )
 }

@@ -1,3 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+    font-family: 'Quicksand', sans-serif;
+}
+
+.zoomEffect{
+    transition: transform 0.3s ease;
+}
+.zoomEffect:hover{
+    transform:scale(1.05);
+}
