@@ -1,7 +1,9 @@
+import Login from "../components/Login"
+
 function HomePage() {
   return (
     <div>
-      Hello World
+      <Login/>
     </div>
   )
 }
