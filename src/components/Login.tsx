@@ -1,44 +1,46 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
-import { LoginAPI } from '../services/interactionsAPI';
+import { LoginAPI, initiateServerAPI } from '../services/interactionsAPI';
 // import backgroundImg from 'https://wallpapers.com/images/hd/plain-background-0aqx3e65vih1xev1.jpg'
-// import { isValidEmail, isValidPassword } from '../../services/validations';
-// import { useDispatch } from 'react-redux';
-// import { login } from '../../features/user/userSlice';
+import { useDispatch } from 'react-redux';
+import { login } from '../features/user/userSlice';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
   const Navigate = useNavigate()
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
       //if already logged in
       Navigate('/chats')
     }
+    //test the server API
+    (async () => {
+      const test = await initiateServerAPI()
+      if(test?.message) console.log(test.message)
+    })()
   }, [Navigate])
 
   const handleLogin = async (event: { preventDefault: () => void; }) => {    //Submit the Login data and redirect to Home
     try {
       event.preventDefault()
       setEmail((email).toLowerCase().trimEnd())
-      console.log(email, password)        //test mode
+      // console.log(email, password)        //test mode
 
       if (!email || !password) {
         return toast.error("Missing required fields");
       }
       setLoading(true);
       const response = await LoginAPI(email, password);
-      console.log("Reg", response)    //test
+      // console.log("Reg", response)    //test
       if (response?.data) {
         toast.success(' Login successful');
         setTimeout(() => {
-          console.log("token", response?.data?.token)
-          // localStorage.setItem("token", response?.data?.token);
-          // dispatch(login(response))
+          dispatch(login(response.data))
           Navigate('/chats')
         }, 2000);
       } else {
@@ -90,7 +92,7 @@ function Login() {
 
             <div>
               {!loading ? <button type="submit" className="flex w-full justify-center rounded-md bg-cyan-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">Sign in</button> :
-                <button type="button" className="flex w-full justify-center rounded-md bg-cyan-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">Sign in</button>
+                <button type="button" className="flex w-full justify-center rounded-md bg-cyan-600 bg-opacity-50 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">Sign in</button>
               }
             </div>
           </form>

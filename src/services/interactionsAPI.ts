@@ -45,9 +45,23 @@ const initiateServerAPI = async () => {
     }
 }
 
+const getChatsAPI = async () => {
+    try {
+        const url = baseUrlAPI + '/chat/';
+        const response = await axios.get(url)
+        if (response.data) {
+            return response.data
+        }
+    } catch (error) {
+        console.error('Error:', (error as Error).message, '|', error);
+        return error
+    }
+}
+
 
 export {
     SignupAPI,
     LoginAPI,
     initiateServerAPI,
+    getChatsAPI,
 }

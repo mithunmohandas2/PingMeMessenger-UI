@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { SignupAPI } from '../services/interactionsAPI';
 // import backgroundImg from '/images/loginBg.jpg';
-// import { isValidEmail, isValidName, isValidPassword, isValidPhoneNumber } from '../../services/validations'
+import { useDispatch } from 'react-redux';
+import { login } from '../features/user/userSlice';
 
 function Resgister() {
     const [name, setName] = useState("");
@@ -12,6 +13,7 @@ function Resgister() {
     const [password2, setPassword2] = useState('');
     const [loading, setLoading] = useState(false)
     const Navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const handleSignup = async (event: { preventDefault: () => void; }) => {
         try {
@@ -22,7 +24,7 @@ function Resgister() {
             setName(name.trimEnd());
             setEmail((email).trimEnd());
 
-            console.log(name, email, password)   //test mode
+            // console.log(name, email, password)   //test mode
 
             if (!name || !email || !password) {
                 return toast.error("Missing required fields");
@@ -33,8 +35,7 @@ function Resgister() {
             if (response?.data) {
                 toast.success(' Signup successful \n Please Login to continue');
                 setTimeout(() => {
-                    console.log("token",response?.data?.token)
-                    // localStorage.setItem("token", response?.data?.token);
+                    dispatch(login(response.data))
                     Navigate('/chats')
                 }, 2000);
             } else {
@@ -65,7 +66,7 @@ function Resgister() {
                     <form className="space-y-6" onSubmit={handleSignup}>
 
                         <div className="mb-3">
-                            <input id="name" name="name" type="name" required className="block w-full ps-2 sm:me-1 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6" placeholder="First name" pattern="[A-Za-z ]*" minLength={3} value={name} onChange={(input) => { setName(input.target.value.trimStart()) }} />
+                            <input id="name" name="name" type="name" required className="block w-full ps-2 sm:me-1 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-cyan-600 sm:text-sm sm:leading-6" placeholder="Full name" pattern="[A-Za-z ]*" minLength={3} value={name} onChange={(input) => { setName(input.target.value.trimStart()) }} />
                         </div>
 
                         <div className="mb-3">
@@ -88,14 +89,14 @@ function Resgister() {
 
                         <div>
                             {!loading ? <button type="submit" className="flex w-full justify-center rounded-md bg-cyan-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">Register</button> :
-                        <button type="button" className="flex w-full justify-center rounded-md bg-opacity-50 bg-cyan-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">Register</button>}
-                </div>
-            </form>
+                                <button type="button" className="flex w-full justify-center rounded-md bg-opacity-50 bg-cyan-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600">Register</button>}
+                        </div>
+                    </form>
 
-            <p className="mt-10 text-center text-sm text-gray-500">
-                Have an account?  <span className="font-semibold leading-6 text-cyan-600 hover:text-cyan-500 cursor-pointer" onClick={() => Navigate("/")}>Login</span>
-            </p>
-        </div>
+                    <p className="mt-10 text-center text-sm text-gray-500">
+                        Have an account?  <span className="font-semibold leading-6 text-cyan-600 hover:text-cyan-500 cursor-pointer" onClick={() => Navigate("/")}>Login</span>
+                    </p>
+                </div>
             </div >
         </div >
     )
