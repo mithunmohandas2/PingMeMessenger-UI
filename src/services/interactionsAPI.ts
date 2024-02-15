@@ -1,6 +1,8 @@
 import axios from 'axios';
 const baseUrlAPI = import.meta.env.VITE_APP_BASE_URL_API
 
+// -----------------------------------------------------------
+
 const SignupAPI = async (name: string, email: string, password: string) => {
     try {
         const url = baseUrlAPI + '/user/register';    //Signup API endpoint
@@ -17,6 +19,8 @@ const SignupAPI = async (name: string, email: string, password: string) => {
     }
 }
 
+// -----------------------------------------------------------
+
 const LoginAPI = async (email: string, password: string) => {
     try {
         const url = baseUrlAPI + '/user/login';    // Verify Login API endpoint
@@ -32,6 +36,8 @@ const LoginAPI = async (email: string, password: string) => {
     }
 }
 
+// -----------------------------------------------------------
+
 const initiateServerAPI = async () => {
     try {
         const url = baseUrlAPI;
@@ -45,10 +51,43 @@ const initiateServerAPI = async () => {
     }
 }
 
+// -----------------------------------------------------------
+
 const getChatsAPI = async () => {
     try {
         const url = baseUrlAPI + '/chat/';
         const response = await axios.get(url)
+        if (response.data) {
+            return response.data
+        }
+    } catch (error) {
+        console.error('Error:', (error as Error).message, '|', error);
+        return error
+    }
+}
+
+// -----------------------------------------------------------
+
+const getMessagesAPI = async (chatId: string) => {
+    try {
+        const url = baseUrlAPI + `/message/${chatId}`;
+        const response = await axios.get(url)
+        if (response.data) {
+            return response.data
+        }
+    } catch (error) {
+        console.error('Error:', (error as Error).message, '|', error);
+        return error
+    }
+}
+
+// -----------------------------------------------------------
+
+const sendMessageAPI = async (chatId: string, content: string) => {
+    try {
+        const url = baseUrlAPI + `/message`;
+        const data = { chatId, content }
+        const response = await axios.post(url, data)
         if (response.data) {
             return response.data
         }
@@ -64,4 +103,6 @@ export {
     LoginAPI,
     initiateServerAPI,
     getChatsAPI,
+    getMessagesAPI,
+    sendMessageAPI,
 }

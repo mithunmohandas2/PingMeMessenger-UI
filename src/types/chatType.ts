@@ -10,4 +10,13 @@ export interface chat {
     updatedAt: Date,
 }
 
+export interface message {
+    _id: string,
+    chat: chat,
+    content: string,
+    sender: User,
+}
 
+export interface ChatTypeRedux {
+    chatRoom: null | chat,
+}

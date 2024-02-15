@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    userData : null,
+    userData: null,
 }
 
 const userSlice = createSlice({
@@ -14,9 +14,10 @@ const userSlice = createSlice({
 
             // Save in local storage
             localStorage.setItem('token', action.payload.token);
-            localStorage.setItem('name', action.payload.name);
-            localStorage.setItem('_id', action.payload._id);
-            localStorage.setItem('email', action.payload.email);
+            localStorage.setItem('userInfo', JSON.stringify(action.payload));
+            // localStorage.setItem('name', action.payload.name);
+            // localStorage.setItem('_id', action.payload._id);
+            // localStorage.setItem('email', action.payload.email);
         },
         logout: (state) => {
             // Clear all data in local storage & redux state
