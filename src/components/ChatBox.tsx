@@ -9,7 +9,6 @@ import Notification from "./Notification"
 import { chatsUpdate } from "../features/chat/chatSlice"
 import alertSound from "/audio/alert.mp3"
 
-
 function ChatBox() {
     const PUSHER_KEY = import.meta.env.VITE_APP_PUSHER_KEY
     const CLUSTER = import.meta.env.VITE_APP_PUSHER_CLUSTER
@@ -22,12 +21,12 @@ function ChatBox() {
     const messageSentSoundRef = useRef<HTMLAudioElement | null>(null);
     const dispatch = useDispatch()
 
-
     const pusher = new Pusher(PUSHER_KEY, { cluster: CLUSTER });
     const channel = pusher.subscribe(`${chats?._id}`);
 
     useEffect(() => {
         channel.bind('new-message', function ({ data }: PushNotification) {
+            alert('hi')
             if (data?.content) {
                 const content = data?.content;
                 const sender = data?.sender?.name
