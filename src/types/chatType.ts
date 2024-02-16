@@ -6,8 +6,8 @@ export interface chat {
     groupAdmin: User,
     isGroup: boolean,
     users: User[],
-    createdAt: Date,
-    updatedAt: Date,
+    createdAt: string,
+    updatedAt: string,
 }
 
 export interface message {

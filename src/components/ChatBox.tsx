@@ -3,21 +3,45 @@ import { ReduxStateType } from "../types/reduxTypes"
 import { useEffect, useState } from "react"
 import { getMessagesAPI } from "../services/interactionsAPI"
 import { message } from "../types/chatType"
+import Pusher from 'pusher-js'
+import { PushNotification, notify } from "../types/pushNotificationType"
+import Notification from "./Notification"
 
 function ChatBox() {
     const chats = useSelector((state: ReduxStateType) => state.chat.chatRoom)
     const [messages, setMessages] = useState([])
+    const [NotifyMe, setNotifyMe] = useState<notify | null>(null)
     const senderId = useSelector((state: ReduxStateType) => state.user.userData?._id)
+
+    const pusher = new Pusher('16e733f7e85eeba8dc9f', { cluster: 'ap2' });
+    const channel = pusher.subscribe(`${chats?._id}`);
+
+    useEffect(() => {
+        channel.bind('new-message', function ({ data }: PushNotification) {
+            if (data?.content) {
+                const content = data?.content;
+                const sender = data?.sender?.name
+                const dp = data?.sender?.image
+                console.log(senderId, data?.sender?._id)
+                if (senderId != data?.sender?._id) {
+                    setNotifyMe({ content, sender, dp });
+                }
+            }
+            setTimeout(() => {
+                setNotifyMe(null)
+            }, 1000);
+        });
+    }, [pusher])
 
     useEffect(() => {
         if (chats?._id) {
             (async () => {
                 const { data } = await getMessagesAPI(chats?._id!)
-                console.log(data) //test
+                // console.log(data) //test
                 setMessages(data)
             })()
         }
-    }, [chats])
+    }, [chats, NotifyMe])
 
     return (
         <div className="p-4 mb-12">
@@ -45,11 +69,14 @@ function ChatBox() {
                             }
                         </div>
                     ))}
-                    </>
-                    : null) : null}
+                    </> : <div className="text-center">
+                        Welcome to the new chat
+                    </div>) : null}
             </> : <div className="text-center">
                 Click a chat to view messages
             </div>}
+
+            {NotifyMe && <Notification data={NotifyMe} />}
         </div>
     )
 }

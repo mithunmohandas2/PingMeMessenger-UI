@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { LoginAPI, initiateServerAPI } from '../services/interactionsAPI';
-// import backgroundImg from 'https://wallpapers.com/images/hd/plain-background-0aqx3e65vih1xev1.jpg'
 import { useDispatch } from 'react-redux';
 import { login } from '../features/user/userSlice';
 
@@ -54,8 +53,8 @@ function Login() {
   }
 
   const backgroundImageStyle = {
-    // backgroundImage: `url(${backgroundImg})`,
-    backgroundColor: 'red',
+    backgroundColor: 'gray',
+    backgroundImage: `url("https://images.pexels.com/photos/665214/pexels-photo-665214.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',

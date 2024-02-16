@@ -13,7 +13,9 @@ function MessageInputBox() {
 
     async function sendMessage(e: { preventDefault: () => void }) {
         e.preventDefault()
-        if (content?.length < 1) return toast.error("Please type a message to send")
+        if (content?.length < 1) return toast.error("Please type a message to send");
+        if (!chatId) return toast.error("Please select a chat to send");
+
         const sendMessage = await sendMessageAPI(chatId!, content)
         if (sendMessage?.data) {
             toast.success("message sent")

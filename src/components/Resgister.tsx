@@ -48,8 +48,8 @@ function Resgister() {
         }
     }
     const backgroundImageStyle = {
-        // backgroundImage: `url(${backgroundImg})`,
-        backgroundColor: 'blue',
+        backgroundColor: 'gray',
+        backgroundImage: `url("https://images.pexels.com/photos/665214/pexels-photo-665214.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',

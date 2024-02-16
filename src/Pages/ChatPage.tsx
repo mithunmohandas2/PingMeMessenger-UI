@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { logout } from "../features/user/userSlice"
 import { getChatsAPI } from "../services/interactionsAPI"
@@ -8,10 +8,13 @@ import toast, { Toaster } from "react-hot-toast"
 import ChatBox from "../components/ChatBox"
 import { openChat } from "../features/chat/chatSlice"
 import MessageInputBox from "../components/MessageInputBox"
+import { ReduxStateType } from "../types/reduxTypes"
+
 
 function ChatPage() {
     const [chats, setChats] = useState([])
     const [search, setSearch] = useState("")
+    const selectedChatId = useSelector((state: ReduxStateType) => state.chat.chatRoom?._id)
     const Navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -20,10 +23,11 @@ function ChatPage() {
         // console.log(response) //test purpose
         if (response?.data) setChats(response.data)
     }
+
     useEffect(() => {
+        if (!localStorage.getItem("token")) Navigate('/')
         fetchChats()
     }, [])
-
 
     function handleLogout() {
         const isConfirm = window.confirm("Sure to Logout")
@@ -90,7 +94,9 @@ function ChatPage() {
                         </li>
                         {chats ? (chats?.length ? chats.map((chat: chat) => (
                             //on click chat redux gets updated with chat
-                            <li key={chat?._id} className="mb-2 p-2 bg-white hover:bg-gray-50 rounded-lg cursor-pointer"
+                            <li key={chat?._id}
+                                className={selectedChatId === chat?._id ? "mb-2 p-2 bg-blue-200 rounded-lg" :
+                                    "mb-2 p-2 bg-white hover:bg-gray-50 rounded-lg cursor-pointer"}
                                 onClick={() => { dispatch(openChat(chat)) }}>
                                 {chat?.isGroup ?
                                     <div className="flex">
