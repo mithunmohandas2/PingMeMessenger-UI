@@ -23,7 +23,9 @@ export const axiosInterceptor = () => {
     },
         error => {
             // Check for specific error status codes or other conditions
-            console.error('Error:', error.response?.data?.message || error.message || error.response?.data?.data?.message);  // Other Errors
-            return toast.error(error.response?.data?.message || error.message || error.response?.data?.data?.message)
+            const errorMessage = error.response?.data?.message || error.message || error.response?.data?.data?.message
+            console.error('Error:', errorMessage);  // Other Errors
+            if (errorMessage) toast.error(error.response?.data?.message || error.message || error.response?.data?.data?.message)
+            return
         });
 }

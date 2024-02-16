@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { sendMessageAPI } from "../services/interactionsAPI"
 import { useDispatch, useSelector } from "react-redux"
 import { ReduxStateType } from "../types/reduxTypes"
-import { update } from "../features/chat/chatSlice"
+import { chatsUpdate } from "../features/chat/chatSlice"
 import sendMessageSound from "/audio/sentmessage.mp3"
 import toast from "react-hot-toast"
 
@@ -23,7 +23,7 @@ function MessageInputBox() {
             toast.success("message sent")
 
             setContent("") //clear chat input after sending message
-            dispatch(update()) //real time updating chat box
+            dispatch(chatsUpdate()) //real time updating chat box
 
             //play sound when message is sent 
             if (messageSentSoundRef.current && messageSentSoundRef.current.readyState === 4) {

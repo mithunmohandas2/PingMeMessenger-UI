@@ -97,6 +97,52 @@ const sendMessageAPI = async (chatId: string, content: string) => {
     }
 }
 
+// -----------------------------------------------------------
+
+const performSearchAPI = async (search: string) => {
+    try {
+        const url = baseUrlAPI + `/user/all?search=${search}`;
+        const response = await axios.get(url)
+        if (response.data) {
+            return response.data
+        }
+    } catch (error) {
+        console.error('Error:', (error as Error).message, '|', error);
+        return error
+    }
+}
+
+// -----------------------------------------------------------
+
+const openSingleChatAPI = async (userId: string) => {
+    try {
+        const url = baseUrlAPI + `/chat`;
+        const data = { userId }
+        const response = await axios.post(url, data)
+        if (response.data) {
+            return response.data
+        }
+    } catch (error) {
+        console.error('Error:', (error as Error).message, '|', error);
+        return error
+    }
+}
+
+// -----------------------------------------------------------
+
+const openGroupChatAPI = async (search: string) => {
+    try {
+        const url = baseUrlAPI + `/user/all?search=${search}`;
+        const response = await axios.get(url)
+        if (response.data) {
+            return response.data
+        }
+    } catch (error) {
+        console.error('Error:', (error as Error).message, '|', error);
+        return error
+    }
+}
+
 
 export {
     SignupAPI,
@@ -105,4 +151,7 @@ export {
     getChatsAPI,
     getMessagesAPI,
     sendMessageAPI,
+    performSearchAPI,
+    openSingleChatAPI,
+    openGroupChatAPI,
 }

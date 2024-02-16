@@ -20,7 +20,7 @@ function Login() {
     //test the server API
     (async () => {
       const test = await initiateServerAPI()
-      if(test?.message) console.log(test.message)
+      if (test?.message) console.log(test.message)
     })()
   }, [Navigate])
 
@@ -46,7 +46,6 @@ function Login() {
         toast.error(response?.response?.data?.message)
         setLoading(false);
       }
-
     } catch (error) {
       console.log((error as Error).message);
     }

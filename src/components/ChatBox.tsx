@@ -6,10 +6,13 @@ import { message } from "../types/chatType"
 import Pusher from 'pusher-js'
 import { PushNotification, notify } from "../types/pushNotificationType"
 import Notification from "./Notification"
-import { update } from "../features/chat/chatSlice"
+import { chatsUpdate } from "../features/chat/chatSlice"
 import alertSound from "/audio/alert.mp3"
 
+
 function ChatBox() {
+    const PUSHER_KEY = import.meta.env.VITE_APP_PUSHER_KEY
+    const CLUSTER = import.meta.env.VITE_APP_PUSHER_CLUSTER
     const chats = useSelector((state: ReduxStateType) => state.chat.chatRoom)
     const senderId = useSelector((state: ReduxStateType) => state.user.userData?._id)
     const chatUpdate = useSelector((state: ReduxStateType) => state.chat.chatUpdate)
@@ -20,22 +23,23 @@ function ChatBox() {
     const dispatch = useDispatch()
 
 
-    const pusher = new Pusher('16e733f7e85eeba8dc9f', { cluster: 'ap2' });
+    const pusher = new Pusher(PUSHER_KEY, { cluster: CLUSTER });
     const channel = pusher.subscribe(`${chats?._id}`);
 
     useEffect(() => {
         channel.bind('new-message', function ({ data }: PushNotification) {
             if (data?.content) {
-                dispatch(update())
                 const content = data?.content;
                 const sender = data?.sender?.name
                 const dp = data?.sender?.image
+                console.log(senderId, data?.sender?._id) //test
                 if (senderId !== data?.sender?._id) {
                     setNotifyMe({ content, sender, dp });
                     //play sound when message is recieved
                     if (messageSentSoundRef.current && messageSentSoundRef.current.readyState === 4) {
                         messageSentSoundRef.current.play();
                     }
+                    dispatch(chatsUpdate())
                 }
             }
             setTimeout(() => {
