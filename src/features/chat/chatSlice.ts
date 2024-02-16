@@ -2,7 +2,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    chatRoom : null,
+    chatRoom: null,
+    chatUpdate: true,
 }
 
 const chatSlice = createSlice({
@@ -17,8 +18,11 @@ const chatSlice = createSlice({
         closeChat: (state) => {
             state.chatRoom = null;
         },
+        update: (state) => {
+            state.chatUpdate = state.chatUpdate === true ? false : true;
+        },
     }
 })
 
-export const { openChat, closeChat } = chatSlice.actions
+export const { openChat, closeChat, update } = chatSlice.actions
 export default chatSlice.reducer

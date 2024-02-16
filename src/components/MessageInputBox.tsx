@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from "react"
-import toast from "react-hot-toast"
 import { sendMessageAPI } from "../services/interactionsAPI"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { ReduxStateType } from "../types/reduxTypes"
-import alertSound from "/audio/alert.mp3"
+import { update } from "../features/chat/chatSlice"
+import sendMessageSound from "/audio/sentmessage.mp3"
+import toast from "react-hot-toast"
 
 
 function MessageInputBox() {
     const [content, setContent] = useState("");
     const chatId = useSelector((state: ReduxStateType) => state.chat.chatRoom?._id);
     const messageSentSoundRef = useRef<HTMLAudioElement | null>(null);
+    const dispatch = useDispatch()
 
     async function sendMessage(e: { preventDefault: () => void }) {
         e.preventDefault()
@@ -19,13 +21,19 @@ function MessageInputBox() {
         const sendMessage = await sendMessageAPI(chatId!, content)
         if (sendMessage?.data) {
             toast.success("message sent")
-            if (messageSentSoundRef.current) {
+
+            setContent("") //clear chat input after sending message
+            dispatch(update()) //real time updating chat box
+
+            //play sound when message is sent 
+            if (messageSentSoundRef.current && messageSentSoundRef.current.readyState === 4) {
                 messageSentSoundRef.current.play();
             }
         }
     }
 
     useEffect(() => {
+        //clear chat input when user switches chats
         setContent("")
     }, [chatId])
 
@@ -45,7 +53,7 @@ function MessageInputBox() {
                     </div>
 
                     <audio ref={messageSentSoundRef} id="messageSentSound">
-                        <source src={alertSound} type="audio/mpeg" />
+                        <source src={sendMessageSound} type="audio/mpeg" />
                         <p className="text-xs absolute z-20 bottom-0">* Your browser does not support the audio for sound playback</p>
                     </audio>
                 </div>

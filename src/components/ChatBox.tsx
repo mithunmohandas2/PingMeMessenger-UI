@@ -1,17 +1,24 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { ReduxStateType } from "../types/reduxTypes"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getMessagesAPI } from "../services/interactionsAPI"
 import { message } from "../types/chatType"
 import Pusher from 'pusher-js'
 import { PushNotification, notify } from "../types/pushNotificationType"
 import Notification from "./Notification"
+import { update } from "../features/chat/chatSlice"
+import alertSound from "/audio/alert.mp3"
 
 function ChatBox() {
     const chats = useSelector((state: ReduxStateType) => state.chat.chatRoom)
-    const [messages, setMessages] = useState([])
-    const [NotifyMe, setNotifyMe] = useState<notify | null>(null)
     const senderId = useSelector((state: ReduxStateType) => state.user.userData?._id)
+    const chatUpdate = useSelector((state: ReduxStateType) => state.chat.chatUpdate)
+    const [NotifyMe, setNotifyMe] = useState<notify | null>(null)
+    const [messages, setMessages] = useState([])
+    const messagesEndRef = useRef<HTMLElement | null>(null);
+    const messageSentSoundRef = useRef<HTMLAudioElement | null>(null);
+    const dispatch = useDispatch()
+
 
     const pusher = new Pusher('16e733f7e85eeba8dc9f', { cluster: 'ap2' });
     const channel = pusher.subscribe(`${chats?._id}`);
@@ -19,12 +26,16 @@ function ChatBox() {
     useEffect(() => {
         channel.bind('new-message', function ({ data }: PushNotification) {
             if (data?.content) {
+                dispatch(update())
                 const content = data?.content;
                 const sender = data?.sender?.name
                 const dp = data?.sender?.image
-                console.log(senderId, data?.sender?._id)
-                if (senderId != data?.sender?._id) {
+                if (senderId !== data?.sender?._id) {
                     setNotifyMe({ content, sender, dp });
+                    //play sound when message is recieved
+                    if (messageSentSoundRef.current && messageSentSoundRef.current.readyState === 4) {
+                        messageSentSoundRef.current.play();
+                    }
                 }
             }
             setTimeout(() => {
@@ -41,14 +52,19 @@ function ChatBox() {
                 setMessages(data)
             })()
         }
-    }, [chats, NotifyMe])
+    }, [chats, chatUpdate])
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
+
 
     return (
         <div className="p-4 mb-12">
             {chats ? <>
                 {messages ? (messages?.length ?
-                    <> {messages.map((message: message) => (
-                        <div key={message._id}>
+                    <> {messages.map((message: message, index) => (
+                        <div key={index}>
                             {message.sender._id === senderId ?
                                 //  sent messages
                                 <div className="mb-4">
@@ -76,7 +92,13 @@ function ChatBox() {
                 Click a chat to view messages
             </div>}
 
-            {NotifyMe && <Notification data={NotifyMe} />}
+            {/* area to focus when new message comes */}
+            <div ref={messagesEndRef as React.LegacyRef<HTMLDivElement>}></div>
+
+            <Notification data={NotifyMe} />
+            <audio ref={messageSentSoundRef} id="messageSentSound">
+                <source src={alertSound} type="audio/mpeg" />
+            </audio>
         </div>
     )
 }

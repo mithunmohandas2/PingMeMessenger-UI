@@ -1,4 +1,4 @@
-# Project Overview
+#PingMe Messenger UI Project Overview
 ![Screenshot](./public/images/screenshot.jpg)
 
 This is a sample project created by Mithun Mohandas. Its a collaboration of React with Typescript, Tailwind CSS and Vite.
@@ -6,7 +6,7 @@ This is a sample project created by Mithun Mohandas. Its a collaboration of Reac
 Key Features : 
 ➔ Responsive Design: Ensures a consistent experience across devices and screen sizes.
 
-# Getting Started
+## Getting Started
 To get the project up and running on your local machine, follow these steps:
 
 Prerequisites : Node.js and npm installed on your system.
@@ -18,7 +18,7 @@ Start the development server: npm run dev
 
 Usage : Once the development server is running, access the dashboard in your browser at http://localhost:5173. Explore the various features and functionalities available within the dashboard interface.
 
-# Acknowledgements
+## Acknowledgements
 Special thanks to "Snive.io" for giving the opportunity to work on this project and showcase my React based development skills.
 
 ## Contact 

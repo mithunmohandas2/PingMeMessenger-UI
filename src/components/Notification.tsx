@@ -6,8 +6,10 @@ function Notification(props: any) {
     const [popUp, setPopUp] = useState<notify | null>(null)
 
     useEffect(() => {
-        // console.log("props", props.data)
         if (props?.data) setPopUp(props.data)
+        setTimeout(() => {
+            setPopUp(null)
+        }, 1000);
     }, [props])
 
     return (

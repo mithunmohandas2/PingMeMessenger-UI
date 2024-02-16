@@ -19,4 +19,5 @@ export interface message {
 
 export interface ChatTypeRedux {
     chatRoom: null | chat,
+    chatUpdate: boolean
 }
