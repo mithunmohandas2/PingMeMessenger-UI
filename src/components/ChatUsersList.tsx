@@ -10,6 +10,7 @@ import JoinChatRoom from "./JoinChatRoom"
 function ChatUsersList() {
   const selectedChatId = useSelector((state: ReduxStateType) => state.chat.chatRoom?._id)
   const chatListUpdate = useSelector((state: ReduxStateType) => state.chat.userListUpdate)
+  const loggedUserID: string = useSelector((state: ReduxStateType) => state.user.userData?._id)!
   const [chats, setChats] = useState([])
   const Navigate = useNavigate()
   const dispatch = useDispatch()
@@ -31,7 +32,7 @@ function ChatUsersList() {
 
         {/* New chat room join & add users */}
         <JoinChatRoom />
-        
+
         {chats ? (chats?.length ? chats.map((chat: chat) => (
           //on click chat redux gets updated with chat
           <li key={chat?._id}
@@ -41,12 +42,12 @@ function ChatUsersList() {
             {chat?.isGroup ?
               <div className="flex">
                 <img src="https://www.mydemy.co/wp-content/plugins/buddyboss-platform/bp-core/images/group-avatar-legacy.png" className="w-full sm:w-9 sm:h-9 me-2 rounded-lg" alt="logo" />
-                <div className="hidden sm:block" >{chat.chatName}</div>
+                <div className="hidden sm:block">{chat.chatName}</div>
               </div>
               :
               <div className="flex">
-                <img src={chat.users[1].image} className="w-full sm:w-9 sm:h-9 me-2 rounded-lg" alt="logo" />
-                <div className="hidden sm:block" >{chat.users[1].name}</div>
+                <img src={chat.users[0]._id === loggedUserID ? chat.users[1].image : chat.users[0].image} className="w-full sm:w-9 sm:h-9 me-2 rounded-lg" alt="logo" />
+                <div className="hidden sm:block" >{chat.users[0]._id === loggedUserID ? chat.users[1].name : chat.users[0].name}</div>
               </div>
             }
 

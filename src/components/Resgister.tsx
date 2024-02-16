@@ -33,7 +33,7 @@ function Resgister() {
             const response = await SignupAPI(name, email, password);
             // console.log("Reg", response)    //test
             if (response?.data) {
-                toast.success(' Signup successful \n Please Login to continue');
+                toast.success('Signup successful');
                 setTimeout(() => {
                     dispatch(login(response.data))
                     Navigate('/chats')

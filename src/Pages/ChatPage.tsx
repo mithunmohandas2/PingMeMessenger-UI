@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { logout } from "../features/user/userSlice"
 import { Toaster } from "react-hot-toast"
@@ -7,10 +7,13 @@ import MessageInputBox from "../components/MessageInputBox"
 import SearchBox from "../components/SearchBox"
 import ChatUsersList from "../components/ChatUsersList"
 import { useEffect } from "react"
+import { ReduxStateType } from "../types/reduxTypes"
+import { User } from "../types/userTypes"
 
 function ChatPage() {
     const Navigate = useNavigate()
     const dispatch = useDispatch()
+    const user: User | null = useSelector((state: ReduxStateType) => state.user.userData)
 
     function handleLogout() {
         const isConfirm = window.confirm("Sure to Logout")
@@ -32,8 +35,10 @@ function ChatPage() {
                     <img src="/images/logo.png" className="w-7 h-7 me-2" alt="logo" />
                     <h1 className="text-xl font-bold">PingMe Messenger</h1>
                 </div>
-
-                <button onClick={handleLogout}>Logout</button>
+                <div className="flex">
+                    <img src={user?.image} className="w-6 h-6 me-2" alt="logo" />
+                    {user?.name} | <button className="mx-2" onClick={handleLogout}>Logout</button>
+                </div>
             </header>
 
 

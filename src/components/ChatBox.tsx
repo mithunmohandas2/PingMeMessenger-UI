@@ -8,6 +8,7 @@ import { PushNotification, notify } from "../types/pushNotificationType"
 import Notification from "./Notification"
 import { chatsUpdate } from "../features/chat/chatSlice"
 import alertSound from "/audio/alert.mp3"
+import toast from "react-hot-toast"
 
 function ChatBox() {
     const PUSHER_KEY = import.meta.env.VITE_APP_PUSHER_KEY
@@ -26,12 +27,11 @@ function ChatBox() {
 
     useEffect(() => {
         channel.bind('new-message', function ({ data }: PushNotification) {
-            alert('hi')
             if (data?.content) {
                 const content = data?.content;
                 const sender = data?.sender?.name
                 const dp = data?.sender?.image
-                console.log(senderId, data?.sender?._id) //test
+                toast(`New message from ${sender}`, { icon: '✉️', });
                 if (senderId !== data?.sender?._id) {
                     setNotifyMe({ content, sender, dp });
                     //play sound when message is recieved
@@ -43,7 +43,7 @@ function ChatBox() {
             }
             setTimeout(() => {
                 setNotifyMe(null)
-            }, 1000);
+            }, 5000);
         });
     }, [pusher])
 

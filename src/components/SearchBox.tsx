@@ -16,7 +16,7 @@ function SearchBox() {
 
     async function searchHelper(e: { preventDefault: () => void }) {
         e.preventDefault()
-        if (searchKeyword?.length < 1) return toast.error("Please enter a search keyword")
+        // if (searchKeyword?.length < 1) return toast.error("Please enter a search keyword") //validation temp
         const { data } = await performSearchAPI(searchKeyword);
         if (data) {
             // console.log(data) //test 
