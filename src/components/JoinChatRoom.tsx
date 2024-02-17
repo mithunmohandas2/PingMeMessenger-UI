@@ -52,7 +52,11 @@ function JoinChatRoom() {
 
     function addToGroupHelper(_id: string) {
         if (userId === _id) return toast.error("You are already a member of group");
-        if (selectedUsers.includes(_id)) return toast.error("Person already selected");
+        if (selectedUsers.includes(_id)) {
+            const removeUser = [...selectedUsers]
+            removeUser.splice(removeUser.indexOf(_id), 1);
+            return setSelectedUsers(removeUser)
+        }
         setSelectedUsers([...selectedUsers, _id])
     }
 
@@ -93,15 +97,16 @@ function JoinChatRoom() {
                 </form>
 
                 <ul>
-                    <div className="mx-auto max-w-7xl px-2 md:px-0 my-4">
+                    <div className="mx-auto max-w-7xl px-2 md:px-0 my-4 mt-10">
                         <div className="grid grid-cols-2 gap-[30px] md:grid-cols-4">
 
                             {searchResults.map((user: User, index) => (
                                 <li key={index}>
 
                                     {/* user card */}
-                                    <div className="max-w-xs mx-auto bg-white shadow-md rounded-lg overflow-hidden mb-4 zoomEffect"
+                                    <div className="max-w-xs mx-auto bg-blue-200 shadow-md rounded-lg overflow-hidden mb-4 zoomEffect"
                                         onClick={() => { addToGroupHelper(user._id!) }}>
+                                        {selectedUsers.includes(user._id!) ? <h1 className="absolute text-3xl m-2 bg-white rounded-xl px-2 border">✔️</h1> : null}
                                         <img className="w-full h-auto" src={user.image} alt={user.name} />
                                         <div className="p-4">
                                             <h3 className="text-sm font-semibold">{user.name}</h3>
