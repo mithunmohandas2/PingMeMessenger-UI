@@ -24,6 +24,7 @@ function SearchBox() {
             setIsModalOpen(true); // Open the modal
         }
     }
+    
     const closeModal = () => {
         setIsModalOpen(false); // Close the modal
     };

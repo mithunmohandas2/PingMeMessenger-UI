@@ -49,7 +49,8 @@ function Resgister() {
     }
     const backgroundImageStyle = {
         backgroundColor: 'gray',
-        backgroundImage: `url("https://images.pexels.com/photos/665214/pexels-photo-665214.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")`,
+        // backgroundImage: `url("https://images.pexels.com/photos/665214/pexels-photo-665214.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")`,
+        backgroundImage: `url("/images/background.jpg")`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
@@ -57,7 +58,7 @@ function Resgister() {
     return (
         <div className="flex min-h-screen flex-col justify-center px-6 py-16 sm:py-10 lg:px-8" style={backgroundImageStyle}>
             <Toaster />
-            <div className='p-8 bg-slate-100 rounded-2xl mx-auto'>
+            <div className='p-8 bg-slate-100 rounded-2xl mx-auto bg-opacity-70'>
                 <div className="sm:mx-auto sm:w-full sm:max-w-3xl">
                     <h2 className="mt-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 ">Create a new account</h2>
                 </div>

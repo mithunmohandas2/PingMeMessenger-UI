@@ -53,7 +53,8 @@ function Login() {
 
   const backgroundImageStyle = {
     backgroundColor: 'gray',
-    backgroundImage: `url("https://images.pexels.com/photos/665214/pexels-photo-665214.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")`,
+    // backgroundImage: `url("https://images.pexels.com/photos/665214/pexels-photo-665214.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")`,
+    backgroundImage: `url("/images/background.jpg")`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -62,7 +63,7 @@ function Login() {
   return (
     <div className="flex min-h-screen flex-col justify-center px-6 py-16 sm:py-10 lg:px-8" style={backgroundImageStyle}>
       <Toaster />
-      <div className='p-8 bg-slate-100 rounded-2xl sm:max-w-xs mx-auto'>
+      <div className='p-8 bg-slate-100 rounded-2xl sm:max-w-xs mx-auto bg-opacity-70'>
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 ">Sign in to your account</h2>
         </div>
