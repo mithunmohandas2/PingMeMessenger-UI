@@ -130,10 +130,11 @@ const openSingleChatAPI = async (userId: string) => {
 
 // -----------------------------------------------------------
 
-const openGroupChatAPI = async (search: string) => {
+const openGroupChatAPI = async (name: string, users: string) => {
     try {
-        const url = baseUrlAPI + `/user/all?search=${search}`;
-        const response = await axios.get(url)
+        const url = baseUrlAPI + `/chat/group`;
+        const data = { name, users }
+        const response = await axios.post(url, data)
         if (response.data) {
             return response.data
         }

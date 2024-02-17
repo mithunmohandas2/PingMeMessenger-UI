@@ -1,10 +1,11 @@
 import { useState } from "react";
 import toast from "react-hot-toast"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ReduxStateType } from "../types/reduxTypes";
 import Modal from "react-modal"
 import { User } from "../types/userTypes";
-import { performSearchAPI } from "../services/interactionsAPI";
+import { openGroupChatAPI, performSearchAPI } from "../services/interactionsAPI";
+import { openChat, usersListUpdate } from "../features/chat/chatSlice";
 
 
 function JoinChatRoom() {
@@ -13,16 +14,31 @@ function JoinChatRoom() {
     const [chatName, setChatName] = useState("");
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+    const dispatch = useDispatch()
 
-
-    function newGroupCreateHelper() {
-        toast.error("pending to implement")
+    async function newGroupCreateHelper() {
+        const name = chatName.trim()
+        const users = JSON.stringify(selectedUsers)
+        if (!chatName) {
+            return toast.error("Please enter a chat name");
+        }
+        if (!users.length) {
+            return toast.error("Please select any 2 users");
+        }
+        // console.log(name, users) //test
+        const createGroup = await openGroupChatAPI(name, users)
+        if (createGroup?.data) {
+            dispatch(usersListUpdate());
+            closeModal();
+            dispatch(openChat(createGroup.data))
+        }
     }
 
     const closeModal = () => {
         setIsModalOpen(false); // Close the modal
+        setSelectedUsers([])
     };
-
 
     async function searchHelper(e: { preventDefault: () => void }) {
         e.preventDefault()
@@ -34,8 +50,10 @@ function JoinChatRoom() {
         }
     }
 
-    function addToGroupHelper(_id: any) {
-        throw new Error("Function not implemented.");
+    function addToGroupHelper(_id: string) {
+        if (userId === _id) return toast.error("You are already a member of group");
+        if (selectedUsers.includes(_id)) return toast.error("Person already selected");
+        setSelectedUsers([...selectedUsers, _id])
     }
 
     return (
@@ -52,10 +70,13 @@ function JoinChatRoom() {
             {/* Modal */}
             <Modal isOpen={isModalOpen} onRequestClose={closeModal} ariaHideApp={false}>
                 <h2 className="text-center text-xl bg-blue-600 text-white py-2 rounded-lg mb-10">Join Chat Room</h2>
-                <label htmlFor="chatName">Chat Name</label>
-                <input type="text" value={chatName}  placeholder="Enter a name for chat"
-                onChange={(e) => setChatName(e.target.value)} />
 
+                <div className="m-4">
+                    <label htmlFor="chatName" className="mb-3">Chat Name</label>
+                    <input type="text" value={chatName} placeholder="Enter a name for chat"
+                        className="w-full px-3 py-2 mt-2 border border-gray-300 focus:outline-none rounded-lg"
+                        onChange={(e) => setChatName(e.target.value)} />
+                </div>
 
                 {/* searchbox */}
                 <form onSubmit={searchHelper}>
@@ -80,7 +101,7 @@ function JoinChatRoom() {
 
                                     {/* user card */}
                                     <div className="max-w-xs mx-auto bg-white shadow-md rounded-lg overflow-hidden mb-4 zoomEffect"
-                                        onClick={() => { addToGroupHelper(user._id) }}>
+                                        onClick={() => { addToGroupHelper(user._id!) }}>
                                         <img className="w-full h-auto" src={user.image} alt={user.name} />
                                         <div className="p-4">
                                             <h3 className="text-sm font-semibold">{user.name}</h3>
@@ -94,7 +115,7 @@ function JoinChatRoom() {
                     </div>
                 </ul>
 
-                <button className="" onClick={newGroupCreateHelper}>Create Group Chat</button>
+                <button className=" bg-blue-600 text-white p-2 rounded-lg" onClick={newGroupCreateHelper}>Create Group Chat</button>
 
                 <button className="fixed bottom-12 end-14" onClick={closeModal}>Close</button>
             </Modal>
