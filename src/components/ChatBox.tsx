@@ -14,8 +14,8 @@ function ChatBox() {
     const PUSHER_KEY = import.meta.env.VITE_APP_PUSHER_KEY
     const CLUSTER = import.meta.env.VITE_APP_PUSHER_CLUSTER
     const chats = useSelector((state: ReduxStateType) => state.chat.chatRoom)
-    const senderId = useSelector((state: ReduxStateType) => state.user.userData?._id)
     const chatUpdate = useSelector((state: ReduxStateType) => state.chat.chatUpdate)
+    const senderId = useSelector((state: ReduxStateType) => state.user.userData?._id)
     const [NotifyMe, setNotifyMe] = useState<notify | null>(null)
     const [messages, setMessages] = useState([])
     const messagesEndRef = useRef<HTMLElement | null>(null);
@@ -23,7 +23,7 @@ function ChatBox() {
     const dispatch = useDispatch()
 
     const pusher = new Pusher(PUSHER_KEY, { cluster: CLUSTER });
-    const channel = pusher.subscribe(`${chats?._id}`);
+    const channel = pusher.subscribe(`${senderId}`);
 
     useEffect(() => {
         channel.bind('new-message', function ({ data }: PushNotification) {
@@ -63,7 +63,7 @@ function ChatBox() {
 
 
     return (
-        <div className="p-4 mb-12">
+        <div className="p-4 pb-20">
             {chats ? <>
                 {messages ? (messages?.length ?
                     <> {messages.map((message: message, index) => (

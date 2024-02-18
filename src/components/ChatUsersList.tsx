@@ -10,6 +10,7 @@ import JoinChatRoom from "./JoinChatRoom"
 function ChatUsersList() {
   const selectedChatId = useSelector((state: ReduxStateType) => state.chat.chatRoom?._id)
   const chatListUpdate = useSelector((state: ReduxStateType) => state.chat.userListUpdate)
+  const chatUpdate = useSelector((state: ReduxStateType) => state.chat.chatUpdate)
   const loggedUserID: string = useSelector((state: ReduxStateType) => state.user.userData?._id)!
   const [chats, setChats] = useState([])
   const Navigate = useNavigate()
@@ -24,11 +25,11 @@ function ChatUsersList() {
   useEffect(() => {
     if (!localStorage.getItem("token")) Navigate('/unauthorized')
     fetchChats()
-  }, [chatListUpdate])
+  }, [chatListUpdate, chatUpdate])
 
   return (
     <>
-      <ul className="p-4 mb-14">
+      <ul className="p-4 pb-20">
 
         {/* New chat room join & add users */}
         <JoinChatRoom />
